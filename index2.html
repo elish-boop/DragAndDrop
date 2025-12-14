@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Переміщення напівпрозорих об'єктів</title>
+
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      position: relative;
+      background-color: #f2f2f2;
+      overflow: hidden;
+    }
+
+    /* Спільні властивості для всіх об'єктів */
+    .object {
+      position: absolute;
+      cursor: grab;
+      user-select: none;
+    }
+
+    /* Квадрат */
+    #square {
+      width: 100px;
+      height: 100px;
+      background-color: rgba(255, 0, 0, 0.6); /* напівпрозорий червоний */
+      top: 60px;
+      left: 60px;
+    }
+
+    /* Коло */
+    #circle {
+      width: 100px;
+      height: 100px;
+      background-color: rgba(0, 255, 0, 0.6); /* напівпрозорий зелений */
+      border-radius: 50%;
+      top: 60px;
+      left: 220px;
+    }
+
+    /* Трикутник */
+    #triangle {
+      width: 0;
+      height: 0;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      border-bottom: 100px solid rgba(0, 0, 255, 0.6); /* напівпрозорий синій */
+      top: 60px;
+      left: 380px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="square" class="object"></div>
+  <div id="circle" class="object"></div>
+  <div id="triangle" class="object"></div>
+
+  <script>
+    const objects = document.querySelectorAll('.object');
+
+    let activeObject = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    objects.forEach(obj => {
+      obj.addEventListener('mousedown', (e) => {
+        activeObject = obj;
+
+        offsetX = e.clientX - obj.offsetLeft;
+        offsetY = e.clientY - obj.offsetTop;
+
+        obj.style.cursor = 'grabbing';
+      });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (activeObject) {
+        activeObject.style.left = (e.clientX - offsetX) + 'px';
+        activeObject.style.top  = (e.clientY - offsetY) + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (activeObject) {
+        activeObject.style.cursor = 'grab';
+        activeObject = null;
+      }
+    });
+  </script>
+
+</body>
+</html>
