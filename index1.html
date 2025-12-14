@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Переміщення об'єктів</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      position: relative;
+      background-color: #f0f0f0;
+      overflow: hidden;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      cursor: grab;
+      user-select: none;
+    }
+
+    #box1 { background-color: #e74c3c; top: 50px;  left: 50px; }
+    #box2 { background-color: #2ecc71; top: 50px;  left: 200px; }
+    #box3 { background-color: #3498db; top: 50px;  left: 350px; }
+  </style>
+</head>
+<body>
+
+  <div class="box" id="box1"></div>
+  <div class="box" id="box2"></div>
+  <div class="box" id="box3"></div>
+
+  <script>
+    const boxes = document.querySelectorAll('.box');
+    let activeBox = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    boxes.forEach(box => {
+      box.addEventListener('mousedown', (e) => {
+        activeBox = box;
+        offsetX = e.clientX - box.offsetLeft;
+        offsetY = e.clientY - box.offsetTop;
+        box.style.cursor = 'grabbing';
+      });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (activeBox) {
+        activeBox.style.left = (e.clientX - offsetX) + 'px';
+        activeBox.style.top  = (e.clientY - offsetY) + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (activeBox) {
+        activeBox.style.cursor = 'grab';
+        activeBox = null;
+      }
+    });
+  </script>
